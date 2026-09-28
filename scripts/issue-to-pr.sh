@@ -13,7 +13,7 @@ issue="${1:?usage: $0 <issue-number>}"
 repo="${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner -q .nameWithOwner)}"
 session="issue-${issue}-$(date +%s)"
 workdir=/workspace/repo
-branch="agent/issue-${issue}"
+branch="agent/${session}"
 root="$(cd "$(dirname "$0")/.." && pwd)"
 out="$root/runs/issue-${issue}"
 mkdir -p "$out"
