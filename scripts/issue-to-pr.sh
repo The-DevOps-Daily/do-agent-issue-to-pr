@@ -21,6 +21,7 @@ mkdir -p "$out"
 log() { printf '%s %s\n' "$(date -u +%H:%M:%S)" "$*" | tee -a "$out/timeline.log" >&2; }
 
 cleanup() {
+  doctl harness-runtime logs "$session" >"$out/session.log" 2>&1 || true
   log "removing session $session"
   echo y | doctl harness-runtime remove "$session" >/dev/null 2>&1 || true
 }
@@ -37,8 +38,9 @@ doctl harness-runtime create --spec "$root/agent.yaml" --name "$session" \
 
 # 2. Clone the repo from outside the agent loop: it is public, and the
 #    sandbox has no GitHub credentials to clone a private one anyway.
-doctl harness-runtime exec "$session" -- \
-  git clone -q "https://github.com/$repo" "$workdir"
+#    exec runs as root, so hand the checkout to the agent's own user.
+doctl harness-runtime exec "$session" -- sh -c \
+  "git clone -q https://github.com/$repo $workdir && chown -R agent:agent $workdir"
 
 # 3. One headless run. Any action the policy would ask about is rejected,
 #    because nobody is there to approve it.
@@ -65,8 +67,9 @@ fi
 
 # 4. Check the result ourselves instead of trusting the summary: read the
 #    diff out of the sandbox and run the tests there again.
-doctl harness-runtime exec "$session" -- \
-  sh -c "cd $workdir && git add -A && git diff --cached" >"$out/change.patch"
+doctl harness-runtime exec "$session" -- sh -c \
+  "git -c safe.directory=$workdir -C $workdir add -A && git -c safe.directory=$workdir -C $workdir diff --cached" \
+  >"$out/change.patch"
 if [ ! -s "$out/change.patch" ]; then
   log "agent made no change"
   gh issue comment "$issue" -R "$repo" --body "The agent finished without changing any file."
@@ -81,7 +84,15 @@ fi
 log "tests pass in the sandbox"
 
 # 5. Open the pull request from outside the sandbox, with our own credentials.
-summary=$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("text","").strip())' <"$out/answer.json")
+# The answer narrates the whole run; keep the closing summary for the PR body.
+summary=$(python3 - "$out/answer.json" <<'PY'
+import json, re, sys
+text = json.load(open(sys.argv[1])).get("text", "")
+text = re.sub(r"\n{3,}", "\n\n", text).strip()
+parts = re.split(r"\*\*Summary:?\*\*:?", text)
+print(parts[-1].strip() if len(parts) > 1 else text.split("\n\n")[-1].strip())
+PY
+)
 tmp=$(mktemp -d)
 git clone -q "https://github.com/$repo" "$tmp/repo"
 git -C "$tmp/repo" checkout -q -b "$branch"
