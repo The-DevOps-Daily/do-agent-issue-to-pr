@@ -16,5 +16,5 @@ def parse_duration(text: str) -> int:
         raise ValueError(f"not a duration: {text!r}")
     total = 0
     for value, unit in parts:
-        total = int(value) * _UNITS[unit]
+        total += int(value) * _UNITS[unit]
     return total
