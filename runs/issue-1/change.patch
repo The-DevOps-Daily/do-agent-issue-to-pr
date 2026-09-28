@@ -1,0 +1,28 @@
+diff --git a/durations/__init__.py b/durations/__init__.py
+index 368f167..c855ba6 100644
+--- a/durations/__init__.py
++++ b/durations/__init__.py
+@@ -16,5 +16,5 @@ def parse_duration(text: str) -> int:
+         raise ValueError(f"not a duration: {text!r}")
+     total = 0
+     for value, unit in parts:
+-        total = int(value) * _UNITS[unit]
++        total += int(value) * _UNITS[unit]
+     return total
+diff --git a/tests/test_durations.py b/tests/test_durations.py
+index f2468d7..f6ab8d9 100644
+--- a/tests/test_durations.py
++++ b/tests/test_durations.py
+@@ -13,6 +13,12 @@ class ParseDurationTest(unittest.TestCase):
+     def test_hours(self):
+         self.assertEqual(parse_duration("2h"), 7200)
+ 
++    def test_combined_hours_minutes(self):
++        self.assertEqual(parse_duration("1h30m"), 5400)
++
++    def test_combined_hours_minutes_seconds(self):
++        self.assertEqual(parse_duration("2h15m30s"), 8130)
++
+     def test_empty(self):
+         with self.assertRaises(ValueError):
+             parse_duration("  ")

@@ -1,0 +1,14 @@
+· run 01a0e818-c8c6-7463-9411-8609c4e213f5 started
+· read
+· read
+· read
+· read
+· read
+· edit
+· edit
+· write
+· ls -la repo/durations/__init__.py
+· cat > repo/durations/__init__.py << 'PYEOF' """Parse human-friendly durations such as "90s", "15m" or "1h30m" into seconds.""" import re _UNITS = {"s": 1, "m": 60, "h": 3600, "d": 86400} _PART = re.compile(r"(\d+)([smhd])") _VALID = re.compile(r"(\d+[smhd])+") def parse_duration(text: str) -> int: """Return the number of seconds in a duration string like "1h30m".""" text = text.strip().lower() if not text: raise ValueError("empty duration") if not _VALID.fullmatch(text): raise ValueError(f"not a duration: {text!r}") parts = _PART.findall(text) if not parts: raise ValueError(f"not a duration: {text!r}") total = 0 for value, unit in parts: total += int(value) * _UNITS[unit] return total PYEOF
+· write
+· cat > repo/tests/test_durations.py << 'PYEOF' import unittest from durations import parse_duration class ParseDurationTest(unittest.TestCase): def test_seconds(self): self.assertEqual(parse_duration("90s"), 90) def test_minutes(self): self.assertEqual(parse_duration("15m"), 900) def test_hours(self): self.assertEqual(parse_duration("2h"), 7200) def test_combined_hours_minutes(self): self.assertEqual(parse_duration("1h30m"), 5400) def test_combined_hours_minutes_seconds(self): self.assertEqual(parse_duration("2h15m30s"), 8130) def test_empty(self): with self.assertRaises(ValueError): parse_duration(" ") def test_days(self): self.assertEqual(parse_duration("7d"), 604800) def test_combined_days_hours(self): self.assertEqual(parse_duration("1d12h"), 129600) def test_unknown_unit_is_rejected(self): with self.assertRaises(ValueError): parse_duration("1h30x") def test_completely_invalid_text(self): with self.assertRaises(ValueError): parse_duration("abc") if __name__ == "__main__": unittest.main() PYEOF
+· cd repo && python3 -m unittest -q

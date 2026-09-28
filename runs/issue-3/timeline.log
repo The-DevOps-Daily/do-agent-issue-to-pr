@@ -1,0 +1,7 @@
+12:58:31 issue #3: Reject durations with unknown units
+12:58:31 creating session issue-3-1790600274
+12:58:51 tests before: 8
+12:58:51 running the agent
+12:59:36 tests pass in the sandbox: 8 before, 10 after
+12:59:43 opened https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/7
+12:59:49 removing session issue-3-1790600274

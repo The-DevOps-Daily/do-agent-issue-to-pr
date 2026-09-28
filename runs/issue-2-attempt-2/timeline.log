@@ -1,0 +1,6 @@
+12:53:38 issue #2: Support days in durations
+12:53:38 creating session issue-2-1790600017
+12:53:52 tests before: 6
+12:53:52 running the agent
+12:54:30 tests pass in the sandbox: 6 before, 10 after
+12:54:36 removing session issue-2-1790600017

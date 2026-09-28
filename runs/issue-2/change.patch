@@ -1,0 +1,32 @@
+diff --git a/durations/__init__.py b/durations/__init__.py
+index c855ba6..47aea32 100644
+--- a/durations/__init__.py
++++ b/durations/__init__.py
+@@ -2,8 +2,8 @@
+ 
+ import re
+ 
+-_UNITS = {"s": 1, "m": 60, "h": 3600}
+-_PART = re.compile(r"(\d+)([smh])")
++_UNITS = {"s": 1, "m": 60, "h": 3600, "d": 86400}
++_PART = re.compile(r"(\d+)([smhd])")
+ 
+ 
+ def parse_duration(text: str) -> int:
+diff --git a/tests/test_durations.py b/tests/test_durations.py
+index f6ab8d9..efb23ef 100644
+--- a/tests/test_durations.py
++++ b/tests/test_durations.py
+@@ -23,6 +23,12 @@ class ParseDurationTest(unittest.TestCase):
+         with self.assertRaises(ValueError):
+             parse_duration("  ")
+ 
++    def test_days(self):
++        self.assertEqual(parse_duration("7d"), 604800)
++
++    def test_combined_days_hours(self):
++        self.assertEqual(parse_duration("1d12h"), 129600)
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

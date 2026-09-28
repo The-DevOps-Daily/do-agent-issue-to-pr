@@ -1,0 +1,13 @@
+12:53:38 issue #2: Support days in durations
+12:53:38 creating session issue-2-1790600017
+12:53:52 tests before: 6
+12:53:52 running the agent
+12:54:30 tests pass in the sandbox: 6 before, 10 after
+To https://github.com/The-DevOps-Daily/do-agent-issue-to-pr
+ ! [rejected]        agent/issue-2 -> agent/issue-2 (non-fast-forward)
+error: failed to push some refs to 'https://github.com/The-DevOps-Daily/do-agent-issue-to-pr'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+12:54:36 removing session issue-2-1790600017

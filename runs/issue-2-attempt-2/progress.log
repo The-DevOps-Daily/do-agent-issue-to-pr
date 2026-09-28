@@ -1,0 +1,16 @@
+· run 01a0e814-3431-756c-a640-c27b8ad2acf5 started
+· read
+· read
+· read
+· read
+· read
+· edit
+· write
+· edit
+· cat repo/durations/__init__.py
+· ls -la repo/durations/__init__.py
+· sed -i 's/_UNITS = {"s": 1, "m": 60, "h": 3600}/_UNITS = {"s": 1, "m": 60, "h": 3600, "d": 86400}/' repo/durations/__init__.py && sed -i 's/_PART = re.compile(r"(\\d+)(\[smh\])")/_PART = re.compile(r"(\\d+)([smhd])")/' repo/durations/__init__.py
+· read
+· edit
+· cat > repo/tests/test_durations.py << 'ENDOFFILE' import unittest from durations import parse_duration class ParseDurationTest(unittest.TestCase): def test_seconds(self): self.assertEqual(parse_duration("90s"), 90) def test_minutes(self): self.assertEqual(parse_duration("15m"), 900) def test_hours(self): self.assertEqual(parse_duration("2h"), 7200) def test_combined_hours_minutes(self): self.assertEqual(parse_duration("1h30m"), 5400) def test_combined_hours_minutes_seconds(self): self.assertEqual(parse_duration("2h15m30s"), 8130) def test_days(self): self.assertEqual(parse_duration("7d"), 604800) def test_combined_days_hours(self): self.assertEqual(parse_duration("1d12h"), 129600) def test_days_minutes(self): self.assertEqual(parse_duration("1d30m"), 88200) def test_empty(self): with self.assertRaises(ValueError): parse_duration(" ") def test_invalid(self): with self.assertRaises(ValueError): parse_duration("xyz") if __name__ == "__main__": unittest.main() ENDOFFILE
+· python3 -m unittest -q

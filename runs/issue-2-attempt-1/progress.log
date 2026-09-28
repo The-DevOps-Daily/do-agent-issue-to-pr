@@ -1,0 +1,19 @@
+· run 01a0e812-c713-7555-bf55-1ae05e8fe434 started
+· read
+· read
+· read
+· read
+· read
+· edit
+· edit
+· ls repo/durations/__init__.py
+· edit
+· write
+· cat repo/durations/__init__.py
+· sed -i 's/_UNITS = {"s": 1, "m": 60, "h": 3600}/_UNITS = {"s": 1, "m": 60, "h": 3600, "d": 86400}/' repo/durations/__init__.py && sed -i 's/_PART = re.compile(r"(\\d+)([smh])")/_PART = re.compile(r"(\\d+)([smhd])")/' repo/durations/__init__.py
+· read
+· sed -i 's/\[smh\]/[smhd]/' repo/durations/__init__.py
+· read
+· cat >> repo/tests/test_durations.py << 'PYEOF' def test_days(self): self.assertEqual(parse_duration("7d"), 604800) def test_combined_days_hours(self): self.assertEqual(parse_duration("1d12h"), 129600) PYEOF
+· read
+· cd repo && python3 -m unittest -q

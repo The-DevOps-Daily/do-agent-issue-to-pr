@@ -1,0 +1,6 @@
+12:49:06 issue #1: parse_duration('1h30m') returns 1800 instead of 5400
+12:49:06 creating session issue-1-1790599744
+12:49:18 running the agent
+12:49:36 tests pass in the sandbox
+12:49:43 opened https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/4
+12:49:45 removing session issue-1-1790599744

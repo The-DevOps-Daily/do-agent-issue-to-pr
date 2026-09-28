@@ -1,0 +1,40 @@
+diff --git a/durations/__init__.py b/durations/__init__.py
+index 47aea32..ae396e0 100644
+--- a/durations/__init__.py
++++ b/durations/__init__.py
+@@ -4,6 +4,7 @@ import re
+ 
+ _UNITS = {"s": 1, "m": 60, "h": 3600, "d": 86400}
+ _PART = re.compile(r"(\d+)([smhd])")
++_VALID = re.compile(r"(\d+[smhd])+")
+ 
+ 
+ def parse_duration(text: str) -> int:
+@@ -11,6 +12,8 @@ def parse_duration(text: str) -> int:
+     text = text.strip().lower()
+     if not text:
+         raise ValueError("empty duration")
++    if not _VALID.fullmatch(text):
++        raise ValueError(f"not a duration: {text!r}")
+     parts = _PART.findall(text)
+     if not parts:
+         raise ValueError(f"not a duration: {text!r}")
+diff --git a/tests/test_durations.py b/tests/test_durations.py
+index efb23ef..8305ca6 100644
+--- a/tests/test_durations.py
++++ b/tests/test_durations.py
+@@ -29,6 +29,14 @@ class ParseDurationTest(unittest.TestCase):
+     def test_combined_days_hours(self):
+         self.assertEqual(parse_duration("1d12h"), 129600)
+ 
++    def test_unknown_unit_is_rejected(self):
++        with self.assertRaises(ValueError):
++            parse_duration("1h30x")
++
++    def test_completely_invalid_text(self):
++        with self.assertRaises(ValueError):
++            parse_duration("abc")
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

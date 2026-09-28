@@ -1,0 +1,13 @@
+· run 01a0e810-08de-73ee-96c7-e51de5b7d8ff started
+· read
+· read
+· read
+· read
+· read
+· edit
+· sed -i 's/total = int(value)/total += int(value)/' repo/durations/__init__.py
+· read
+· edit
+· sed -i '/def test_empty/i\ def test_combined_hours_minutes(self):\ self.assertEqual(parse_duration("1h30m"), 5400)\ \ def test_combined_hours_minutes_seconds(self):\ self.assertEqual(parse_duration("2h15m30s"), 8130)\ ' repo/tests/test_durations.py
+· read
+· python3 -m unittest -q
