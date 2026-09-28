@@ -1,0 +1,36 @@
+# Label an issue "agent" and this job hands it to an OpenCode session on
+# DigitalOcean Managed Agents, then opens a pull request with the change.
+name: issue-to-pr
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  agent:
+    if: github.event.label.name == 'agent'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency: issue-${{ github.event.issue.number }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Run the agent
+        run: scripts/issue-to-pr.sh "${{ github.event.issue.number }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          DO_INFERENCE_KEY: ${{ secrets.DO_INFERENCE_KEY }}
+      - name: Keep the run record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-${{ github.event.issue.number }}
+          path: runs/
