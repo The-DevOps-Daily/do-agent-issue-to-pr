@@ -1,0 +1,4 @@
+$ doctl harness-runtime prompt claude-code-check "Reply with exactly one word: ready"
+· run 01a0e824-aa4b-7007-8398-37b7241b3bfb started
+Failed to authenticate. API Error: 403 this model is not available for your subscription tier
+run failed: Failed to authenticate. API Error: 403 this model is not available for your subscription tier

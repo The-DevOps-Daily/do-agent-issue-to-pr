@@ -1,0 +1,6 @@
+$ POST /v1/chat/completions model=anthropic-claude-5-sonnet
+HTTP 403 this model is not available for your subscription tier
+$ POST /v1/chat/completions model=openai-gpt-5.3-codex
+HTTP 403 this model is not available for your subscription tier
+$ POST /v1/chat/completions model=deepseek-v4-pro
+HTTP 200 answer: ok

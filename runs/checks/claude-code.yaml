@@ -1,0 +1,15 @@
+name: claude-code-check
+agent: claude-code
+size: mars-1vcpu-1gb
+idle_timeout: 5m
+env:
+  HARNESS_INFERENCE_MODEL: anthropic-claude-5-sonnet
+secrets:
+  HARNESS_INFERENCE_API_KEY: ${DO_INFERENCE_KEY}
+egress:
+  - api.github.com
+permissions:
+  default: deny
+  rules:
+    - tool: file.read
+      action: allow

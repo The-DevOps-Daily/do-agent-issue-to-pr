@@ -1,0 +1,1 @@
+{"error":{"code":400,"message":"agentspec: secrets[0] (HARNESS_INFERENCE_API_KEY): value contains an unexpanded variable placeholder (e.g. ${VAR}). Please substitute the actual value before sending"}}

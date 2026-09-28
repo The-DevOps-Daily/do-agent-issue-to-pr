@@ -1,0 +1,5 @@
+$ doctl harness-runtime create --spec runs/checks/claude-code.yaml
+Creating agent session
+• Validating configuration…
+✗ Invalid arguments
+  ANTHROPIC_API_KEY is required to start a claude-code session (set the environment variable, or pass --secret ANTHROPIC_API_KEY=- / NAME=@path): environment variable ANTHROPIC_API_KEY is not set locally (set it in your environment, or re-run in an interactive terminal to be prompted)

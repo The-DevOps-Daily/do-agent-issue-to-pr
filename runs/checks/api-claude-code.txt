@@ -1,0 +1,2 @@
+$ curl -X POST https://api.digitalocean.com/v2/agents/sessions -H "Content-Type: application/x-yaml" --data-binary @claude-code.yaml   # secret filled in
+HTTP 200 name: claude-code-check status: SESSION_STATUS_READY

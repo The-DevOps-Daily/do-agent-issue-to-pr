@@ -1,0 +1,7 @@
+# egress in agent.yaml / claude-code.yaml: [api.github.com]; commands run with: doctl harness-runtime exec claude-code-check -- sh -c '...'
+$ python3 -c "import urllib.request as u; print(u.urlopen('https://example.com', timeout=8).status)"
+urllib.error.URLError: <urlopen error Tunnel connection failed: 404 Not Found>
+$ python3 -c "import urllib.request as u; print(u.urlopen('https://pypi.org/simple/', timeout=8).status)"
+urllib.error.URLError: <urlopen error Tunnel connection failed: 404 Not Found>
+$ python3 -c "import urllib.request as u; print(u.urlopen('https://github.com', timeout=8).status)"
+200

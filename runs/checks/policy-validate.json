@@ -1,0 +1,69 @@
+{
+    "agent": "opencode",
+    "version": "1.15.11",
+    "ok": true,
+    "defaultAction": "deny",
+    "defaultActionVerdict": "exact",
+    "defaultActionRendered": "deny",
+    "verdicts": [
+        {
+            "rule": {
+                "id": "r1",
+                "tool": "file.read",
+                "action": "allow",
+                "enforcement": "best-effort"
+            },
+            "verdict": "exact",
+            "rendered": "allow"
+        },
+        {
+            "rule": {
+                "id": "r2",
+                "tool": "file.write",
+                "match": {
+                    "path": "/workspace/**"
+                },
+                "action": "allow",
+                "enforcement": "best-effort"
+            },
+            "verdict": "exact",
+            "rendered": "allow"
+        },
+        {
+            "rule": {
+                "id": "r3",
+                "tool": "bash",
+                "action": "allow",
+                "enforcement": "best-effort"
+            },
+            "verdict": "exact",
+            "rendered": "allow"
+        },
+        {
+            "rule": {
+                "id": "r4",
+                "tool": "bash",
+                "match": {
+                    "command": "git push*"
+                },
+                "action": "deny",
+                "enforcement": "strict"
+            },
+            "verdict": "exact",
+            "rendered": "deny"
+        },
+        {
+            "rule": {
+                "id": "r5",
+                "tool": "bash",
+                "match": {
+                    "command": "curl *"
+                },
+                "action": "deny",
+                "enforcement": "strict"
+            },
+            "verdict": "exact",
+            "rendered": "deny"
+        }
+    ]
+}
