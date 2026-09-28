@@ -4,6 +4,7 @@ import re
 
 _UNITS = {"s": 1, "m": 60, "h": 3600, "d": 86400}
 _PART = re.compile(r"(\d+)([smhd])")
+_VALID = re.compile(r"(\d+[smhd])+")
 
 
 def parse_duration(text: str) -> int:
@@ -11,6 +12,8 @@ def parse_duration(text: str) -> int:
     text = text.strip().lower()
     if not text:
         raise ValueError("empty duration")
+    if not _VALID.fullmatch(text):
+        raise ValueError(f"not a duration: {text!r}")
     parts = _PART.findall(text)
     if not parts:
         raise ValueError(f"not a duration: {text!r}")
