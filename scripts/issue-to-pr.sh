@@ -42,6 +42,15 @@ doctl harness-runtime create --spec "$root/agent.yaml" --name "$session" \
 doctl harness-runtime exec "$session" -- sh -c \
   "git clone -q https://github.com/$repo $workdir && chown -R agent:agent $workdir"
 
+# unittest prints "Ran N tests"; count before and after so a test the
+# agent wrote but that never runs cannot pass unnoticed.
+count_tests() {
+  doctl harness-runtime exec "$session" -- sh -c \
+    "cd $workdir && python3 -m unittest -q 2>&1" | sed -n 's/^Ran \([0-9]*\) tests\{0,1\}.*/\1/p'
+}
+before=$(count_tests)
+log "tests before: $before"
+
 # 3. One headless run. Any action the policy would ask about is rejected,
 #    because nobody is there to approve it.
 prompt=$(cat <<EOF
@@ -81,7 +90,13 @@ if ! doctl harness-runtime exec "$session" -- \
   gh issue comment "$issue" -R "$repo" --body "The agent's change fails the test suite, so no pull request was opened."
   exit 1
 fi
-log "tests pass in the sandbox"
+after=$(count_tests)
+log "tests pass in the sandbox: $before before, $after after"
+if grep -q '^+++ b/tests/' "$out/change.patch" && [ "$after" -le "$before" ]; then
+  log "the agent changed tests/ but no new test ran; not opening a pull request"
+  gh issue comment "$issue" -R "$repo" --body "The agent changed tests/, but the number of tests that run did not go up ($before before, $after after), so no pull request was opened."
+  exit 1
+fi
 
 # 5. Open the pull request from outside the sandbox, with our own credentials.
 # The answer narrates the whole run; keep the closing summary for the PR body.
@@ -102,7 +117,7 @@ git -C "$tmp/repo" push -q -u origin "$branch"
 pr=$(gh pr create -R "$repo" --head "$branch" --title "Fix #$issue: $title" \
   --body "$summary
 
-Closes #$issue. Written by an OpenCode agent in DigitalOcean Managed Agents session \`$session\`; the tests passed in the sandbox. Review before merging.")
+Closes #$issue. Written by an OpenCode agent in DigitalOcean Managed Agents session \`$session\`; the tests passed in the sandbox ($before before, $after after). Review before merging.")
 rm -rf "$tmp"
 log "opened $pr"
 gh issue comment "$issue" -R "$repo" --body "Opened $pr for review."
