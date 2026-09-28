@@ -1,0 +1,35 @@
+# One OpenCode session per GitHub issue, on DigitalOcean Managed Agents.
+# The model runs on DigitalOcean serverless inference, so the only key the
+# sandbox holds is a DigitalOcean model access key. It gets no GitHub token:
+# the workflow reads the diff out of the sandbox and opens the pull request.
+name: issue-to-pr
+agent: opencode
+size: mars-2vcpu-4gb
+idle_timeout: 10m
+env:
+  HARNESS_INFERENCE_MODEL: deepseek-v4-pro
+secrets:
+  HARNESS_INFERENCE_API_KEY: ${DO_INFERENCE_KEY}
+# Naming a host turns egress into a deny-by-default allowlist. The platform
+# adds GitHub (for the clone) and the model endpoint on its own.
+egress:
+  - api.github.com
+permissions:
+  default: deny
+  filesystem:
+    mode: workspace-write
+  rules:
+    - tool: file.read
+      action: allow
+    - tool: file.write
+      match: { path: "/workspace/**" }
+      action: allow
+    - tool: bash
+      action: allow
+    # Last matching rule wins, so these override the allow above.
+    - tool: bash
+      match: { command: "git push*" }
+      action: deny
+    - tool: bash
+      match: { command: "curl *" }
+      action: deny
