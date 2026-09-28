@@ -2,8 +2,8 @@
 
 import re
 
-_UNITS = {"s": 1, "m": 60, "h": 3600}
-_PART = re.compile(r"(\d+)([smh])")
+_UNITS = {"s": 1, "m": 60, "h": 3600, "d": 86400}
+_PART = re.compile(r"(\d+)([smhd])")
 
 
 def parse_duration(text: str) -> int:
