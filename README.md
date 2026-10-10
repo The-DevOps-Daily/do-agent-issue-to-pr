@@ -31,15 +31,15 @@ A person reviews and merges. The script's checks only decide whether a pull requ
 
 Every run is in [`runs/`](runs/): the terminal output, the agent's answer with token counts, the diff, the test output and the session event log.
 
-| Issue | Result | Input / output tokens | Model cost at list price |
+| Issue | Result | Input / output tokens (agent's count) | Billed (September invoice) |
 |---|---|---|---|
-| [#1](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/issues/1) combined durations lose all but the last part | [#4](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/4), merged | 8,481 / 1,024 | $0.018 |
-| [#2](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/issues/2) support days, first try | [#5](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/5), closed in review: the new tests never ran | 14,372 / 1,848 | $0.031 |
-| #2, second try | 4 new tests ran; the push failed because #5's branch still existed | 14,676 / 2,268 | $0.033 |
-| #2, third try | [#6](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/6), merged | 9,868 / 1,605 | $0.023 |
-| [#3](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/issues/3) reject unknown units | [#7](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/7), merged | 8,750 / 2,109 | $0.023 |
+| [#1](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/issues/1) combined durations lose all but the last part | [#4](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/4), merged | 8,481 / 1,024 | $0.05 |
+| [#2](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/issues/2) support days, first try | [#5](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/5), closed in review: the new tests never ran | 14,372 / 1,848 | $0.08 |
+| #2, second try | 4 new tests ran; the push failed because #5's branch still existed | 14,676 / 2,268 | $0.07 |
+| #2, third try | [#6](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/6), merged | 9,868 / 1,605 | $0.06 |
+| [#3](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/issues/3) reject unknown units | [#7](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/7), merged | 8,750 / 2,109 | $0.06 |
 
-Model cost uses DigitalOcean's list price for DeepSeek V4 Pro: $1.74 per million input tokens and $3.48 per million output tokens. Each session also starts with a short readiness run (235 to 4,587 input tokens in these runs), and the sandbox is billed for the minutes it exists.
+**Corrected on 2026-10-12.** This table first showed model cost from the agent's own token counts, $0.018 to $0.033 per run. The September invoice billed $0.05 to $0.08 per run, $0.32 for the five: it also charges cache-read tokens (57,000 to 105,000 per run at $0.348 per million for DeepSeek V4 Pro) and every token line on the invoice was rounded to the cent, with a one-cent minimum. Compute was billed at $0.00. The invoice lines and the scripts that price them are in [agent-droplets-break-even](https://github.com/The-DevOps-Daily/agent-droplets-break-even).
 
 ## Security notes
 
