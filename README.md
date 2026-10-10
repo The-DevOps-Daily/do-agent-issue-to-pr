@@ -39,7 +39,7 @@ Every run is in [`runs/`](runs/): the terminal output, the agent's answer with t
 | #2, third try | [#6](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/6), merged | 9,868 / 1,605 | $0.06 |
 | [#3](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/issues/3) reject unknown units | [#7](https://github.com/The-DevOps-Daily/do-agent-issue-to-pr/pull/7), merged | 8,750 / 2,109 | $0.06 |
 
-**Corrected on 2026-10-12.** This table first showed model cost from the agent's own token counts, $0.018 to $0.033 per run. The September invoice billed $0.05 to $0.08 per run, $0.32 for the five: it also charges cache-read tokens (57,000 to 105,000 per run at $0.348 per million for DeepSeek V4 Pro) and every token line on the invoice was rounded to the cent, with a one-cent minimum. Compute was billed at $0.00. The invoice lines and the scripts that price them are in [agent-droplets-break-even](https://github.com/The-DevOps-Daily/agent-droplets-break-even).
+**Corrected on 2026-10-10.** This table first showed model cost from the agent's own token counts, $0.018 to $0.033 per run. The September invoice billed $0.05 to $0.08 per run, $0.32 for the five: it also charges cache-read tokens (57,000 to 105,000 per run at $0.348 per million for DeepSeek V4 Pro) and every token line on the invoice was rounded to the cent, with a one-cent minimum. Compute was billed at $0.00. The invoice lines and the scripts that price them are in [agent-droplets-break-even](https://github.com/The-DevOps-Daily/agent-droplets-break-even).
 
 ## Security notes
 
